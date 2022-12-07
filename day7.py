@@ -12,8 +12,6 @@ for x in input:
         else:
             newFolder = x.split()[2]
             currFolder = currFolder + "/" + newFolder
-    # elif x.startswith("$ ls"):
-    #     print("list items")
     elif "$ ls" not in x:
         path = currFolder.split("/")
         element = {}
@@ -29,16 +27,6 @@ for x in input:
         element[key] = value
 
 
-
-# print(f)
-
-# f = {"main" : {
-# "a":{"e": {"i": 584}, "f":29116, "g": 2557, "h.lst": 62596},
-# "b.txt":14848514, 
-# "c.dat": 8504156, 
-# "d":{"j":4060174,"d.log": 8033020,"d.ext":5626152,"k": 7214296, } }}
-
-
 def folderSearch(folder):
     for y in folder:
         if type(folder[y]) is int and "size" not in y:
@@ -51,10 +39,26 @@ def folderSearch(folder):
 main = f["main"]
 
 folderSearch(f)
+used = f["size"]
+total = 70000000
+available = total - used
+needed = 30000000 - available
+print("needed: ", needed)
 
-result = 0
+part2Result = 30000000
+def findfolderToDelete(folder):
+    global part2Result
+    for y in folder:
+        if "size" in y:
+            if folder[y] > needed and folder[y] < part2Result:
+                part2Result = folder[y]
+        if type(folder[y]) is dict:
+            newFolder = folder[y]
+            findfolderToDelete(newFolder)
+
+part1result = 0
 def folderSizeMeas(folder):
-    global result
+    global part1result
     for y in folder:
         if "size" in y:
             if folder[y] <= 100000:
@@ -65,4 +69,8 @@ def folderSizeMeas(folder):
             folderSizeMeas(newFolder)
             
 folderSizeMeas(f)
-print(result)
+print(part1result)
+
+findfolderToDelete(f)       
+print(part2Result)
+
