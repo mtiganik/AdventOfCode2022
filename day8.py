@@ -1,41 +1,33 @@
-f = open("day8.txt")
-grid = []
-for x in f:
-    grid.append(list(x.strip()))
-
-count = 0
 def checkTop(i,j):
     for k in range(0,i):
         if grid[k][j] >= grid[i][j]:
             return False
-    # txt = "Tree [{}],[{}] is visible from top"
-    # print(txt.format(i,j))
     return True
 
 def checkBottom(i,j):
     for k in range(i+1, len(grid)):
         if grid[k][j] >= grid[i][j]:
             return False
-    # txt = "Tree [{}],[{}] is visible from Bottom"
-    # print(txt.format(i,j))
     return True
 
 def checkLeft(i,j):
     for k in range(0,j):
         if grid[i][k] >= grid[i][j]:
             return False
-    # txt = "Tree [{}],[{}] is visible from Left"
-    # print(txt.format(i,j))
     return True
 
 def checkRight(i,j):
     for k in range(j+1, len(grid[0])):
         if grid[i][k] >= grid[i][j]:
             return False
-    # txt = "Tree [{}],[{}] is visible from Right"
-    # print(txt.format(i,j))
     return True
 
+f = open("day8.txt")
+grid = []
+for x in f:
+    grid.append(list(x.strip()))
+
+count = 0
 
 #edge trees:
 count = 2*len(grid[0]) + 2*len(grid) - 4
