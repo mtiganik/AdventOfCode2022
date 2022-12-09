@@ -80,50 +80,51 @@ for x in f:
             #Right
             if jk[i-1] - jk[i] == 2:
                 grid[ik[i]][jk[i]] = '.'
-                ik[i] = ik[i-1]
+
+                if ik[i-1] - ik[i] == 2: ik[i] = ik[i] +1
+                elif ik[i-1] - ik[i] == -2: ik[i] = ik[i]-1
+                else: ik[i] = ik[i-1]
+
                 jk[i] = jk[i]+1
                 grid[ik[i]][jk[i]] = "% s" % i
                 #tail[it][jt] = "#"
             #Down
             elif ik[i-1]-ik[i] == 2:
                 grid[ik[i]][jk[i]] = "."
-                jk[i]=jk[i-1]
+                if jk[i-1] - jk[i] == 2: jk[i] = jk[i] +1
+                elif jk[i-1]-jk[i] == -2: jk[i] = jk[i] -1
+                else: jk[i]=jk[i-1]
                 ik[i] = ik[i]+1
                 grid[ik[i]][jk[i]] = "% s" % i
                 #tail[it][jt] = "#"
             #Left
             elif jk[i-1] - jk[i] == -2:
                 grid[ik[i]][jk[i]] ="."
-                ik[i] = ik[i-1]
+                if ik[i-1] - ik[i] == 2: ik[i] = ik[i] +1
+                elif ik[i-1] - ik[i] == -2: ik[i] = ik[i] -1
+                else: ik[i] = ik[i-1]
                 jk[i] = jk[i]-1
                 grid[ik[i]][jk[i]] = "% s" % i
                 #tail[it][jt] = "#"
             #Up
             elif ik[i-1] - ik[i] == -2:
                 grid[ik[i]][jk[i]] = "."
-                jk[i] = jk[i-1]
+                #jk[i] = jk[i-1]
+                if jk[i-1] -jk[i] == 2: jk[i] = jk[i] -1
+                elif jk[i-1] - jk[i] == -2: jk[i] = jk[i]-1
+                else: jk[i] = jk[i-1]
                 ik[i] = ik[i]-1
                 grid[ik[i]][jk[i]] = "% s" % i
                 #tail[it][jt] = "#"
+            if i == 9:
+                tail[ik[i]][jk[i]] = "#"
     
-        # print("Round")
-        # for x in grid:
-        #     print(x)
-    print("Round")
-    for x in grid:
-        str = ""
-        str = str.join(x)
-        print(str)
 
-# str = ""
-# list1 = ["a","b","c"]
-# str.join(list1)
-# print()
-# for x in tail:
-#     str = ""
-#     str = str.join(x)
-#     print(str)
-# cnt = 0
-# for x in tail:
-#     cnt = cnt + x.count("#")
-# print(cnt)
+for x in tail:
+    str = ""
+    str = str.join(x)
+    print(str)
+cnt = 0
+for x in tail:
+    cnt = cnt + x.count("#")
+print(cnt)
