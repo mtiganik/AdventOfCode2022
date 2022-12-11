@@ -42,9 +42,12 @@ for x in f:
 # divideBy = 3
 
 #Part 2
-cycles = 20
+cycles = 10000
 divideBy = 1
-
+lcm = 1
+for x in data:
+    lcm = lcm*x["DivisibleBy"]
+print(lcm)
 dummy = 0
 for i in range(0,cycles):
     dummy = i
@@ -55,17 +58,10 @@ for i in range(0,cycles):
         for k in items:
             newLevel = getWorryLev(k, Operation, divideBy)
             if (newLevel/x["DivisibleBy"]).is_integer():
-                newLevel = newLevel/x["DivisibleBy"]
                 newMonkeyNo = x["ifTrue"]
             else:
                 newMonkeyNo = x["ifFalse"]
-                if Operation.count("old") == 2 and "*" in Operation:
-                    newLevel = math.sqrt(newLevel)
-                elif "*" in Operation:
-                    ls=Operation.split()
-                    num = int(ls[2])
-
-                #x["ifFalseCnt"] = x["ifFalseCnt"] +1
+            newLevel %= lcm
             x["inspectionCnt"] = x["inspectionCnt"] +1
             newMonkey = data[newMonkeyNo]
             newMonkey["items"].append(newLevel)
