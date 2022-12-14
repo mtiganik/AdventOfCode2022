@@ -1,5 +1,5 @@
 
-rangey = 167 # if excpection put it bigger
+rangey = 168 # if excpection put it bigger
 # rangey = 12 #test
 grid = [["."]*1000 for _ in range(rangey)]
 
@@ -41,19 +41,48 @@ def findSpotToFall(y,x):
             break
 
 
+
+#find grid length:
+floor = 0
+for i in range(0,len(grid)):
+    if "#" in grid[i]:
+        floor = i
+floor = floor  + 2
+fl = ["#"]*1000
+grid[floor] = fl 
+
 checker = 1
 cycle = 0
-
-for i in range(0,1000):
+for i in range(0,100000):
     cycle = cycle +1
     findSpotToFall(0,500)
+
 
 for x in grid:
     str = "".join(x[420:560:1]) #test
     # str = "".join(x[490:510:1]) #test
     print(str)
+
 cnt = 0
 for x in grid:
     cnt = cnt + x.count("o")
 
 print(cnt)
+
+#Part1
+
+# checker = 1
+# cycle = 0
+# for i in range(0,1000):
+#     cycle = cycle +1
+#     findSpotToFall(0,500)
+
+# for x in grid:
+#     str = "".join(x[420:560:1]) #test
+#     # str = "".join(x[490:510:1]) #test
+#     print(str)
+# cnt = 0
+# for x in grid:
+#     cnt = cnt + x.count("o")
+
+# print(cnt)
