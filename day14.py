@@ -1,6 +1,5 @@
 
-rangey = 168 # if excpection put it bigger
-# rangey = 12 #test
+rangey = 200 # should be enought
 grid = [["."]*1000 for _ in range(rangey)]
 
 f = open("day14.txt")
@@ -13,6 +12,7 @@ for x in f:
         p = [eval(i) for i in p]
         p2ds.append(p)
     sand.append(p2ds)
+
 grid[0][500] = "+"
 for x in sand:
     for k in range(0, len(x)-1):
@@ -41,27 +41,25 @@ def findSpotToFall(y,x):
             break
 
 
+rangeMax = 2000
 
-#find grid length:
-floor = 0
-for i in range(0,len(grid)):
-    if "#" in grid[i]:
-        floor = i
-floor = floor  + 2
-fl = ["#"]*1000
-grid[floor] = fl 
+#Part 2 
+#-------------------
+# floor = 0
+# for i in range(0,len(grid)):
+#     if "#" in grid[i]:
+#         floor = i
+# floor = floor  + 2
+# fl = ["#"]*1000
+# grid[floor] = fl 
+# rangeMax = 100000
+#-------------------
 
 checker = 1
 cycle = 0
-for i in range(0,100000):
+for i in range(0,rangeMax):
     cycle = cycle +1
     findSpotToFall(0,500)
-
-
-for x in grid:
-    str = "".join(x[420:560:1]) #test
-    # str = "".join(x[490:510:1]) #test
-    print(str)
 
 cnt = 0
 for x in grid:
@@ -69,20 +67,8 @@ for x in grid:
 
 print(cnt)
 
-#Part1
-
-# checker = 1
-# cycle = 0
-# for i in range(0,1000):
-#     cycle = cycle +1
-#     findSpotToFall(0,500)
-
+#test
 # for x in grid:
-#     str = "".join(x[420:560:1]) #test
-#     # str = "".join(x[490:510:1]) #test
+#     str = "".join(x[420:560:1]) 
 #     print(str)
-# cnt = 0
-# for x in grid:
-#     cnt = cnt + x.count("o")
 
-# print(cnt)
