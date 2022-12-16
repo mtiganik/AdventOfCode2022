@@ -1,0 +1,15 @@
+1 to 0 is 4
+0 to 6 is 7
+1 to 6 is 11
+1 to 7 is 20
+6 to 7 is 1
+1 to 2 is 9
+2 to 4 is 2
+4 to 7 is 1
+2 to 3 is 6
+7 to 8 is 3
+4 to 3 is 10
+4 to 5 is 15
+4 to 8 is 5
+3 to 5 is 5
+8 to 5 is 12
