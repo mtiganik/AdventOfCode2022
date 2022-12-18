@@ -16,7 +16,7 @@ for x in f:
         if [n,point] not in nodes:
             node = [point, n]
             nodes.append(node)
-    tg = {"p":point, "r":rate,"visited": False, "dist":maxDist}
+    tg = {"p":point, "r":rate,"visited": False, "dist":maxDist,"minsLeft":30}
     points.append(tg)
 
 
@@ -49,30 +49,41 @@ def setStartPoint(name):
     startPoint = [d for d in points if d["p"] == name][0]
     startPoint["dist"] = 0
 
-numOfMaxVals = 5
+def getPointsWithFlow():
+    list =[]
+    for x in points:
+        if x["r"] > 0:
+            list.append(x)
+    return list
+#See asi tagastab numOfMaxVals kõige suurema flowiga kanalit 
+def getMaxValsForCurrentPoint(currentPoint, numOfMaxVals,mins):
+    startpoint = setStartPoint(currentPoint)
+
+    cnt = len(points)
+    while(cnt > 0):
+        point = getCurrentPoint()
+        pointNodes= getNodes(point)
+        setDistanceToNearbyNodes(point,pointNodes)
+        point["visited"] = True
+        cnt = cnt-1
+
+    for x in points:
+        if x["minsLeft"] > (mins-(x["dist"]+1)):
+            x["flow"] = (mins-(x["dist"]+1))*x['r']
+            x["minsLeft"]=mins-(x["dist"]+1)
+
+    newNodes = sorted(points, key = lambda d: d['flow'], reverse=True)[0:numOfMaxVals]
+    return newNodes
+
+
+numOfMaxVals = 3
 start = "AA"
-
-
-#See asi tagastab 5 kõige suurema flowiga kanalit 
 mins = 30
-#def getMaxValsForCurrentPoints(currentPoint, numOfMaxVals)
-startpoint = setStartPoint(start)
-
-cnt = len(points)
-while(cnt > 0):
-    point = getCurrentPoint()
-    pointNodes= getNodes(point)
-    setDistanceToNearbyNodes(point,pointNodes)
-    point["visited"] = True
-    cnt = cnt-1
-
-for x in points:
-    x["flow"] = (mins-(x["dist"]+1))*x['r']
-
-newNodes = sorted(points, key = lambda d: d['flow'], reverse=True)[0:numOfMaxVals]
-
-
-for x in newNodes:
-    print(x)
+noZeroPoints = getPointsWithFlow()
+for x in noZeroPoints:
+    newNodes = getMaxValsForCurrentPoint(x["p"], numOfMaxVals,x["minsLeft"])
+    print("for node:",x["p"])
+    for k in newNodes:
+        print(k)
 
 print("Process finished --- %s seconds ---" % (time.time() - start_time))
