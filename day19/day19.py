@@ -1,4 +1,5 @@
 import re
+from queue import Queue
 grid = []
 f = open("day19/day19.txt")
 for x in f:
@@ -39,7 +40,6 @@ def buyMachine(i, currRes,data):
     return newRes
 
 def checkPattern(pattern, pi,i):
-    #temp = pattern.split("-")
     try:
         if int(pattern[pi]) == i: return True
         else: return False
@@ -62,11 +62,8 @@ def checkGeodeCnt(data,pattern):
             boughtMachineThisTurn[3] = True
             if checkPattern(pattern, patternIndex,3):
                 patternIndex = patternIndex +1
-            else:
-                print("Bought geode outside of pattern")
-            #print(txtToDebug.format(time+1, nameOfMachine[i]))
 
-        for i in range(0,3):
+        for i in range(3,-1,-1):
             if checkResCnt(i,data,currRes) and machines[i] < setup[i] and checkPattern(pattern, patternIndex,i):
                 currRes = buyMachine(i, currRes, data)
                 machines[i] = machines[i] +1
@@ -94,19 +91,18 @@ def base_convert(i, b):
             result.insert(0, i % b)
             i = i // b
     return result
-
-def isValidPattern(pattern):
-    if ("1" not in pattern and "2" not in pattern) or pattern.find('1') > pattern.find('2'):
-        print(pattern,"bad string1:")
-        return False
+def isValidPattern(pattern,maxValPattern):
+    # if len(pattern) > 0:
+    #     if not pattern.startswith(maxValPattern):
+    #         return False
+    if "1" not in pattern: return False
+    elif "2" not in pattern: return False
+    elif pattern.find('1') > pattern.find('2'): return False
     elif "3" in pattern and pattern.find('2') > pattern.find('3'):
-        print(pattern,"bad string2:")
         return False
     elif pattern[1:2]=="3":
-        print(pattern, "bad string3:")
         return False
     elif pattern.startswith("0") and pattern[1:2] == "2":
-        print(pattern,"Bad string4")
         return False
     elif pattern.startswith("3") or pattern.startswith("2"):
         print(pattern, "should not reach here")
@@ -114,39 +110,52 @@ def isValidPattern(pattern):
     return True
 
 
+
 class PatternFactory:
-    def __init__(self,strlen):
+    def __init__(self,strlen, maxValPattern):
         self.strlen = strlen
+        self.maxValPattern = maxValPattern
     
-    #strAsInt = int(currentStr)
-    index = 5
+    index = 0
+    patternsToSkip = []
     def getPattern(self):
-        val = ("".join(map(str,base_convert(self.index,4))))
-
-        if len(val) < self.strlen:
-            val = "0"*self.strlen + val
-            val = val[-self.strlen:]
-        if val.startswith("1") and val[1:2] == ("3"):
-            return -1
-        self.index = self.index + 1 
-
-        if not isValidPattern(val):
+        while 1:
+            val = ("".join(map(str,base_convert(self.index,4))))
+            if len(val) < self.strlen:
+                val = "0"*self.strlen + val
+                val = val[-self.strlen:]
+            if val.startswith("1") and val[1:2] == ("3"):
+                return -1
+            self.index = self.index + 1
+            if isValidPattern(val,self.maxValPattern):break
 
         return val
-i = 0
-pf = PatternFactory(5)
 
-data1 = grid[0]
-maxVal= 0
-pattern = ""
-while pattern != -1 and i < 1000:
-    pattern = pf.getPattern()
-    print(pattern)
-    # result = checkGeodeCnt(data1, pattern)
-    # val, patternIndex = result[0],result[1]
-    # print(pattern, val, patternIndex)
-    # if val[3] >= maxVal:
-    #     maxVal = val[3]
-    i = i +1
-    
-print("Max:", maxVal)
+# val = 1000000
+# print(base_convert(val,4))
+# val = val + 4*4*4*4*4 + 4*4*4*4
+# print(base_convert(val,4))
+
+i = 0
+data = grid[1]
+print(data)
+
+maxValPatterns = []
+
+# pattern = "1112123333"
+# result = checkGeodeCnt(data, pattern)
+for i in range(3,7):
+    pf = PatternFactory(i,maxValPatterns)
+    maxVal= 0
+    while True:
+        pattern = pf.getPattern()
+        if pattern == -1: break
+        result = checkGeodeCnt(data, pattern)
+        val, patternIndex = result[0],result[1]
+        #print(pattern,"cnt:", val[3], val[0:3] )
+        if val[3] >= maxVal:
+            maxVal = val[3]
+
+            maxValPatterns.append(pattern) 
+    print("i = ", i," maxVal: ", maxVal, "pattern:", maxValPatterns[i])
+
