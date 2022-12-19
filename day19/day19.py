@@ -1,8 +1,8 @@
 import re
 grid = []
-# f = open("day19/day19.txt")
-# for x in f:
-#     grid.append([int(s) for s in re.findall(r'\b\d+\b', x)])
+f = open("day19/day19.txt")
+for x in f:
+    grid.append([int(s) for s in re.findall(r'\b\d+\b', x)])
 
 
 def getSetup(pattern):
@@ -39,9 +39,12 @@ def buyMachine(i, currRes,data):
     return newRes
 
 def checkPattern(pattern, pi,i):
-    temp = pattern.split("-")
-    if int(temp[pi]) == i: return True
-    else: return False
+    #temp = pattern.split("-")
+    try:
+        if int(pattern[pi]) == i: return True
+        else: return False
+    except IndexError:
+        return False
 
 def checkGeodeCnt(data,pattern):
     setup = getSetup(pattern)
@@ -57,6 +60,10 @@ def checkGeodeCnt(data,pattern):
             currRes = buyMachine(3, currRes, data)
             machines[3] = machines[3] +1
             boughtMachineThisTurn[3] = True
+            if checkPattern(pattern, patternIndex,3):
+                patternIndex = patternIndex +1
+            else:
+                print("Bought geode outside of pattern")
             #print(txtToDebug.format(time+1, nameOfMachine[i]))
 
         for i in range(0,3):
@@ -75,80 +82,71 @@ def checkGeodeCnt(data,pattern):
                 currRes[i] = currRes[i] + machines[i]
         # print("We have now:",currRes)
         # print(" ")
-    return currRes[3]
+    return [currRes,patternIndex]
 
 nameOfMachine = ["ore", "clay", "obsidian","geode"]
 txtToDebug = "on minute {} we bought {} machine"
 
-# data = grid[0]
-# print(grid[0])
-# print(grid[1])
+#PatternFactory
+def base_convert(i, b):
+    result = []
+    while i > 0:
+            result.insert(0, i % b)
+            i = i // b
+    return result
 
-data1 = [2, 2, 3, 3, 8, 3, 12]
-data1 = [1, 4, 2, 3, 14, 2, 7]
+def isValidPattern(pattern):
+    if ("1" not in pattern and "2" not in pattern) or pattern.find('1') > pattern.find('2'):
+        print(pattern,"bad string1:")
+        return False
+    elif "3" in pattern and pattern.find('2') > pattern.find('3'):
+        print(pattern,"bad string2:")
+        return False
+    elif pattern[1:2]=="3":
+        print(pattern, "bad string3:")
+        return False
+    elif pattern.startswith("0") and pattern[1:2] == "2":
+        print(pattern,"Bad string4")
+        return False
+    elif pattern.startswith("3") or pattern.startswith("2"):
+        print(pattern, "should not reach here")
+    
+    return True
 
-pattern2 = "1-1-1-2-1-2" 
-pattern2 = "0-1-1-2-1-2" 
-patterns = ["1-1-1-2-1-2-2-3-3"]
-patterns = ["111212233"]
 
+class PatternFactory:
+    def __init__(self,strlen):
+        self.strlen = strlen
+    
+    #strAsInt = int(currentStr)
+    index = 5
+    def getPattern(self):
+        val = ("".join(map(str,base_convert(self.index,4))))
 
-maxVal = 0
-txt = "with pattern {} we mine {} geos"
-for k in patterns:
-    val = checkGeodeCnt(data1, k)
-    print(txt.format(k, val))
-    if val >= maxVal:
-        maxVal = val
-print("Max:",data1, maxVal)
+        if len(val) < self.strlen:
+            val = "0"*self.strlen + val
+            val = val[-self.strlen:]
+        if val.startswith("1") and val[1:2] == ("3"):
+            return -1
+        self.index = self.index + 1 
 
-patterns = [
-    "1-1-1-2-2-2-2",
-    "1-1-1-2-2-2-1",
-    "1-1-1-2-2-1-2",
-    "1-1-1-2-1-1-1",
-    "1-1-1-1-2-2-2",
-    "1-1-1-1-2-2-1",
-    "1-1-1-1-2-1-2",
-  # "1-1-1-1-1-1-1",
-    "1-1-2-1-2-2-2",
-    "1-1-2-1-2-2-1",
-    "1-1-2-1-2-1-2",
-    "1-1-2-1-2-1-1",
-    "1-1-2-1-1-2-2",
-    "1-1-2-1-1-2-1",
-    "1-1-2-1-1-1-2",
-  # "1-1-2-1-1-1-1",
-    "0-1-1-2-2-2-2",
-    "0-1-1-2-2-2-1",
-    "0-1-1-2-2-1-2",
-    "0-1-1-2-1-1-1",
-    "0-1-1-1-2-2-2",
-    "0-1-1-1-2-2-1",
-    "0-1-1-1-2-1-2",
-  # "0-1-1-1-1-1-1",
-    "0-1-2-1-2-2-2",
-    "0-1-2-1-2-2-1",
-    "0-1-2-1-2-1-2",
-    "0-1-2-1-2-1-1",
-    "0-1-2-1-1-2-2",
-    "0-1-2-1-1-2-1",
-    "0-1-2-1-1-1-2",
-  # "0-1-2-1-1-1-1",
-    "1-0-1-2-2-2-2",
-    "1-0-1-2-2-2-1",
-    "1-0-1-2-2-1-2",
-    "1-0-1-2-1-1-1",
-    "1-0-1-1-2-2-2",
-    "1-0-1-1-2-2-1",
-    "1-0-1-1-2-1-2",
-  # "1-0-1-1-1-1-1",
-    "1-0-2-1-2-2-2",
-    "1-0-2-1-2-2-1",
-    "1-0-2-1-2-1-2",
-    "1-0-2-1-2-1-1",
-    "1-0-2-1-1-2-2",
-    "1-0-2-1-1-2-1",
-    "1-0-2-1-1-1-2",
-  # "1-0-2-1-1-1-1",
-]
+        if not isValidPattern(val):
+
+        return val
+i = 0
+pf = PatternFactory(5)
+
+data1 = grid[0]
+maxVal= 0
+pattern = ""
+while pattern != -1 and i < 1000:
+    pattern = pf.getPattern()
+    print(pattern)
+    # result = checkGeodeCnt(data1, pattern)
+    # val, patternIndex = result[0],result[1]
+    # print(pattern, val, patternIndex)
+    # if val[3] >= maxVal:
+    #     maxVal = val[3]
+    i = i +1
+    
+print("Max:", maxVal)
