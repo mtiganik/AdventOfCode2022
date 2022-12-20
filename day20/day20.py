@@ -1,30 +1,31 @@
 f = open("day20/day20.txt")
-data = []
-sort = []
+vals = []
+lst = []
 for x in f:
-    data.append(int(x.strip()))
-    sort.append(int(x.strip()))
+    vals.append(int(x.strip()))
+    lst.append(int(x.strip()))
 
 
-size = len(data)
-for i,x in enumerate(data):
-    ii = sort.index(x)
-    val = sort[ii]
-    if val != 0:
-        delimin = int(abs(val)/val)
-        for j in range(0,val, delimin):
-            ci = sort.index(val) 
-            ni = (ci + delimin)%size 
-            if ci == 1 and ni == 0 and delimin==-1:
-                sort.pop(1)
-                sort.append(val)
-            elif ci == size -2 and ni == size -1 and delimin == 1:
-                sort.remove(val)
-                sort.insert(0,val)
-            else: sort[ci], sort[ni] = sort[ni], sort[ci]
+size = len(vals)
+for i,x in enumerate(vals):
+    ii = lst.index(x)
+    val = lst[ii]
+    lst.pop(ii)
+    if(ii+val==0):
+        lst.append(val)
+    elif(ii+val == size-1):
+        lst.insert(0,val)
+    elif val > size and val%size > ii:
+        lst.insert((ii+val+1)%size, val) #debug it
+    elif ii+val >= size: 
+        lst.insert((ii+val+1)%size, val)
+    elif val < 0 and -val >= size: 
+        lst.insert((ii+val-1)%size,val)
+    else :
+        lst.insert(ii+val, val)
     
-zp = sort.index(0)
-el1,el2,el3 = sort[(zp+1000)%size], sort[(zp+2000)%size], sort[(zp+3000)%size]
+zp = lst.index(0)
+el1,el2,el3 = lst[(zp+1000)%size], lst[(zp+2000)%size], lst[(zp+3000)%size]
 print(el1,el2,el3)
 
 print("Part1:", el1+el2+el3)
