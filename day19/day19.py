@@ -62,6 +62,8 @@ def checkGeodeCnt(data,pattern):
             boughtMachineThisTurn[3] = True
             if checkPattern(pattern, patternIndex,3):
                 patternIndex = patternIndex +1
+            else:
+                print("on minute",time, "buy geo machine")
 
         for i in range(3,-1,-1):
             if checkResCnt(i,data,currRes) and machines[i] < setup[i] and checkPattern(pattern, patternIndex,i):
@@ -69,7 +71,7 @@ def checkGeodeCnt(data,pattern):
                 machines[i] = machines[i] +1
                 boughtMachineThisTurn[i] = True
                 patternIndex = patternIndex +1
-                #print(txtToDebug.format(time+1, nameOfMachine[i]))
+                print(txtToDebug.format(time+1, nameOfMachine[i]))
         
         for i in range(0,4):
             if boughtMachineThisTurn[i]: 
@@ -82,7 +84,7 @@ def checkGeodeCnt(data,pattern):
     return [currRes,patternIndex]
 
 nameOfMachine = ["ore", "clay", "obsidian","geode"]
-txtToDebug = "on minute {} we bought {} machine"
+txtToDebug = "on minute {} buy {} machine"
 
 #PatternFactory
 def base_convert(i, b):
@@ -141,10 +143,12 @@ data = grid[1]
 print(data)
 
 maxValPatterns = []
+pattern = "0111212223"
+result = checkGeodeCnt(data, pattern)
 
 # pattern = "1112123333"
 # result = checkGeodeCnt(data, pattern)
-for i in range(3,7):
+for i in range(3,6):
     pf = PatternFactory(i,maxValPatterns)
     maxVal= 0
     while True:
