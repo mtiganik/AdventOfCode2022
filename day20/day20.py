@@ -12,15 +12,19 @@ for i,x in enumerate(data):
     val = sort[ii]
     if val != 0:
         delimin = int(abs(val)/val)
-        bwc = 0
         for j in range(0,val, delimin):
-            ci, ni = abs((size+ii+j+bwc))%size, abs((size+ii+j+delimin+bwc))%size
+            ci = sort.index(val) 
+            ni = (ci + delimin)%size 
             if ci == 1 and ni == 0 and delimin==-1:
                 sort.pop(1)
                 sort.append(val)
-                bwc = bwc -1
+            elif ci == size -2 and ni == size -1 and delimin == 1:
+                sort.remove(val)
+                sort.insert(0,val)
             else: sort[ci], sort[ni] = sort[ni], sort[ci]
     
+zp = sort.index(0)
+el1,el2,el3 = sort[(zp+1000)%size], sort[(zp+2000)%size], sort[(zp+3000)%size]
+print(el1,el2,el3)
 
-for x in sort:
-    print(x)
+print("Part1:", el1+el2+el3)
