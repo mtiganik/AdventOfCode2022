@@ -2,9 +2,10 @@ def calculate(val1,val2, op):
     if op == "*": return val1*val2
     elif op == "+": return val1+val2
     elif op == "-": return val1-val2
-    elif op == "/": return int(val1/val2)
+    elif op == "/": return val1/val2
     else: print("shouldnt reacht here")
 
+# eg 3 + xyz = 5   ->  xyz = 5 - 3
 def backwardCalc(v1,op,v2,targetVal):
     if type(v1) == int:
         if op == "+": return targetVal - v1
@@ -95,4 +96,24 @@ for i in range(1,len(stack)):
 for x in stack:
     print(x["n"], x["v1"], x["op"], x["v2"], x["val"])
 
+
+
+
 print("Part2:", stack[len(stack)-1]["val"])
+
+
+
+
+#Debug
+# currval = stack[len(stack)-1]["val"]
+# stack.reverse()
+# for i,x in enumerate(stack):
+#     if i == len(stack)-1: break
+#     if type(x["v1"]) == int:
+#         currval= calculate(x["v1"], currval, x["op"])
+#     else:
+#         currval = calculate(currval,x["v2"], x["op"])
+# if currval == valToGet:
+#     print("backward calc correct:", currval)
+# else:
+#     print("problem with backwards calc",currval)
