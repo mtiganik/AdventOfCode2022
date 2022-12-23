@@ -63,8 +63,6 @@ def getCoordsOtherSide(currCoords):
             if grid[col][i] == "." or grid[col][i] == "#": return [col,i,dir]
 
 
-
-
 def move(cmd):
     dir = changeDir(cmd[0], coords[2])
     moves = int(cmd[1:])
@@ -92,9 +90,6 @@ def printGrid():
 
 for i,x in enumerate(cmdList):
     coords = move(x)
-    # grid[coords[0]][coords[1]] = str(i)
-    # print("after move",i)
-    # printGrid()
 
 
 def facingVal(dir):
@@ -104,4 +99,4 @@ def facingVal(dir):
     if dir == "U": return 3
 
 sum = (coords[0]+1)*1000 + (coords[1] +1)*4 + facingVal(coords[2])
-print("end sum:", sum)
+print("Part1:", sum)
