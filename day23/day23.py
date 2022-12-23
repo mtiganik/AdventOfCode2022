@@ -1,5 +1,3 @@
-
-
 def checkIfAnyElvesNearby(elve):
     y,x =elve["y"], elve["x"]
     if grid[y-1][x-1] == "." and grid[y-1][x]=="." and grid[y-1][x+1]=="." and grid[y][x-1] == "." and grid[y][x+1]=="." and grid[y+1][x-1] == "." and grid[y+1][x]=="." and grid[y+1][x+1]== ".":
@@ -30,14 +28,18 @@ def proposeAMove(elve):
     return False
 
 def elvesProposesMoves():
+    moveOccured = False
     for x in elves:
         if checkIfAnyElvesNearby(x):
+            moveOccured = True
             x["moveDir"] = direction
             if proposeAMove(x): x["wtm"] = True
             else: x["wtm"] = False
         else: 
             x["wtm"] = False
             continue
+    return moveOccured
+
 def getDestCoords(elve):
     y,x, dir = elve["y"], elve["x"], elve["moveDir"]
     if dir%4 == 0: return [y-1,x]
@@ -47,11 +49,9 @@ def getDestCoords(elve):
 
 def checkifSpotAlreadyTaken(coords):
     if grid[coords[0]][coords[1]] != ".":
-        #print("elves to same spot:", coords)
         return True
     else: return False
 
-#moveDir: 0-N, 1-South, 2-West, 3 - East
 def movePrevElveBack(coords): 
     for elve in elves:
         if elve["y"] == coords[0] and elve["x"] == coords[1]:
@@ -76,9 +76,14 @@ def elvesMove():
             else:
                 makeAMove(x,destCoords)
 
+#Part 1
+extra = 10 #not more than that needed
+
+#Part 2
+extra = 60 #need more empty cells everywhere
+
 f = open("day23/day23.txt")
 grid = []
-extra = 10 #Extra empty cells to add everywhere
 for x in f:
     x = "."*extra + x.rstrip() + "."*extra
     grid.append(list(x))
@@ -93,9 +98,12 @@ for i,x in enumerate(grid):
             cnt = cnt+1
             elves.append({"y": i,"x":j,"wtm":False,"moveDir":3})
 
-rounds = 10
+moveOccured = False
+
+#Part 1:  
+################# for part 2 delete this and uncommet part2 stuff
 direction = 0
-for i in range(0,rounds):
+for i in range(0,10):
     elvesProposesMoves()
     elvesMove()
     direction = (direction + 1)%4
@@ -126,6 +134,17 @@ for i,x in enumerate(grid):
     for k in x:
         if k == ".": cnt = cnt +1
 print("Part1:", cnt)
-# for x in grid:
-#     print("".join(x))
 
+
+#Part 2:
+#################
+# direction = 0
+# moveOccured = True
+# movesCnt = 0
+# while moveOccured == True:
+#     movesCnt = movesCnt +1
+#     if elvesProposesMoves() == False: break
+#     elvesMove()
+#     direction = (direction + 1)%4
+
+# print("Part2", movesCnt)
