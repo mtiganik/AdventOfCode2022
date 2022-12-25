@@ -18,29 +18,28 @@ for x in f:
 
 #25/2 = 12,5
 def toSnafu(val):
-    pow = 2
+    pow = 21
     snafu = ""
     while True:
         powVal = 5**pow
-        if val < powVal/2:
-            pow = pow -1
-            continue
-        if val > powVal/2 and val < 5**pow + powVal/2:
+        if abs(val) < powVal/2:
+            snafu = snafu + "0"
+        elif val > powVal/2 and val < powVal + powVal/2:
             snafu = snafu + "1"
             val = val - powVal
         elif val > powVal + powVal/2 and val < 2*powVal + powVal/2:
             snafu = snafu +"2"
             val = val -2*powVal
-        elif   abs(val) < powVal/2:
-            snafu = snafu + "0"
-        elif  # kood - jaoks
+        elif -val < (powVal+ powVal/2) and -val > (powVal - powVal/2):
             snafu = snafu + "-"
             val = val + powVal
-        elif #kood = jaoks 
+        elif -val < (2*powVal + powVal/2) and -val > (2*powVal - powVal/2):
             snafu = snafu + "="
             val = val + 2*powVal
-
-
+            
         pow = pow -1
-        if pow < 0: return sum
-print(toSnafu(13))
+        if pow < 0: return snafu
+print(toSnafu(sum))
+#1-0---0
+#1121-1110-1=0
+#2=-1=0
