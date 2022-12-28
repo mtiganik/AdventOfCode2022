@@ -39,7 +39,5 @@ def toSnafu(val):
             
         pow = pow -1
         if pow < 0: return snafu
+print(sum)
 print(toSnafu(sum))
-#1-0---0
-#1121-1110-1=0
-#2=-1=0
